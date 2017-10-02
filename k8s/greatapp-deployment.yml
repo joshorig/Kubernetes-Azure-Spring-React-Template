@@ -1,0 +1,59 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: greatapp
+  labels:
+    app: greatapp
+    tier: compute
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: greatapp
+        tier: compute
+    spec:
+      containers:
+      - image: greatappcr.azurecr.io/greatapp:0.1.0
+        command:
+          - "java"
+          - "-Dspring.profiles.active=development"
+          - "-jar"
+          - "spring-boot-and-react-app-0.1.0.jar"
+        imagePullPolicy: Always
+        name: greatapp
+        env:
+          - name: jdbcurl
+            valueFrom:
+              secretKeyRef:
+                name: greatapp-secters
+                key: jdbcurl
+
+          - name: jdbcuser
+            valueFrom:
+              secretKeyRef:
+                name: greatapp-secters
+                key: jdbcuser
+
+          - name: jdbcpass
+            valueFrom:
+              secretKeyRef:
+                name: greatapp-secters
+                key: jdbcpass
+
+          - name: jdbcdialect
+            valueFrom:
+              secretKeyRef:
+                name: greatapp-secters
+                key: jdbcdialect
+
+          - name: logspath
+            value: /app/logs/application.log
+        
+        ports:
+        - containerPort: 8080
+
+      imagePullSecrets:
+      - name: regsecret

@@ -1,0 +1,31 @@
+#git files:
+.git*
+!.gitignore
+!.gitattributes
+
+#ignore Idea project files
+.idea/**
+*.iml
+*DS_Store*
+
+#ignore logs
+*.log
+
+#ignore temp folder
+tmp/**
+
+#ignore targets
+*target
+src/main/frontend/build
+src/main/frontend/etc
+*node
+*node_modules
+*.sass-cache
+package-lock.json
+src/main/resources/static/index.html
+src/main/resources/static/asset-manifest.json
+src/main/resources/static/static
+
+#ignore generated files
+src/main/resources/static/*.css
+src/main/resources/static/*.js

@@ -1,0 +1,57 @@
+@import '../variables';
+
+.card {
+  height: 200px;
+  width: 200px;
+  margin: 5px;
+  background-color: $lemon-chiffon;
+  border-radius: 3px;
+}
+
+.view {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+.card-message, .card-editor {
+  padding: 10px;
+  height: 170px;
+  box-sizing: border-box;
+}
+
+.card-message {
+  overflow: auto;
+}
+
+.card-editor {
+  resize: none;
+  background-color: $lemon-chiffon;
+  border: 2px solid $hippie-orange;
+
+  &:focus {
+    border-color: $deep-orange;
+  }
+}
+
+.options {
+  height: 30px;
+  display: flex;
+  flex-flow: row-reverse;
+  align-items: center;
+}
+
+.option {
+  height: 25px;
+  padding: 5px;
+  margin-right: 5px;
+  background-color: $hippie-orange;
+  color: white;
+  font-size: 12px;
+  border-radius: 3px;
+
+  &:hover {
+    background-color: $deep-orange;
+  }
+}

@@ -1,0 +1,22 @@
+@import '../variables';
+
+.cards {
+  width: 210px;
+  margin-top: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-content: flex-start;
+
+  @media #{$tablet} {
+    width: 420px;
+  }
+
+  @media #{$desktop} {
+    width: 660px;
+  }
+
+  @media #{$large-desktop} {
+    width: 840px;
+  }
+}

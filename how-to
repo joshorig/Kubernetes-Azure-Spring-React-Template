@@ -1,0 +1,62 @@
+## mysql deployment 
+## =======================================
+
+# Create RG for mysql
+az group create --name dbresources --location westus
+
+# Create mysql server
+az mysql server create --resource-group dbresources --name greatappdb --location westus --admin-user greatappadmin --admin-password Password@1 --performance-tier Basic --compute-units 50 --ssl-enforcement Disabled
+# Create mysql firewall rule
+az mysql server firewall-rule create --resource-group dbresources --server greatappdb --name AllowYourIP --start-ip-address 0.0.0.0 --end-ip-address 255.255.255.255
+
+# Show server fqdn
+az mysql server show --resource-group dbresources --name greatappdb --output json | grep fullyQualifiedDomainName | awk '{ print $2 }' | sed "s/[\"\,]//g"
+
+# First time only - Connect to db and initialize it
+mysql -u greatappadmin@greatappdb -h greatappdb.mysql.database.azure.com -P 3306 -p Password@1 < init-db.sql
+
+## k8s and ACR deployment 
+## =======================================
+
+# Create k8s cluster on Azure
+az group create --name myResourceGroup --location eastus
+az acs create --orchestrator-type kubernetes --resource-group myResourceGroup --name myK8sCluster --agent-count 1
+
+# Connect to the cluster
+az acs kubernetes get-credentials --resource-group=myResourceGroup --name=myK8sCluster
+
+# Create Azure Container Registry
+az acr create --name greatapp --resource-group greatapp --sku Basic --admin-enabled true
+
+# Get ACR password
+az acr credential show --name greatapp --query passwords[0].value
+
+# Validate setup
+kubectl get nodes
+
+## Managing k8s secrets and docker registry
+## =======================================
+
+# Login to private registry
+docker login greatapp.azurecr.io -u greatapp -p <ACR_PASS>
+
+# Create secter to allow k8s pull images from private registry
+kubectl create secret docker-registry regsecret --docker-server=greatapp.azurecr.io --docker-username=greatapp --docker-password=${ACR_PASS} --docker-email=example@example.com
+
+# Create secrets for application
+kubectl create secret generic greatapp-secters --from-file=secrets/jdbcdialect --from-file=secrets/jdbcpass --from-file=secrets/jdbcurl --from-file=secrets/jdbcuser
+
+
+## Build section
+## =======================================
+
+# Build docker image
+docker build -t greatapprc.azurecr.io/greatapp:0.1.0 -f Dockerfile.k8s .
+
+# Push image to registry
+docker push greatapprc.azurecr.io/greatapp:0.1.0
+
+## Deploy app to k8s
+## =======================================
+chmod +x deploy.sh
+./deploy.sh

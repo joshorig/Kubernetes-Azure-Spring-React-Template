@@ -1,0 +1,47 @@
+@import '../variables';
+
+.input-field {
+  min-width: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.message {
+  height: 35px;
+  width: 150px;
+  margin-right: 10px;
+  padding: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border: 2px solid $hippie-orange;
+  border-radius: 3px;
+
+  &:focus {
+    border-color: $deep-orange;
+  }
+
+  @media #{$tablet} {
+    width: 350px;
+  }
+
+  @media #{$desktop} {
+    width: 550px;
+  }
+
+  @media #{$large-desktop} {
+    width: 750px;
+  }
+}
+
+.add {
+  height: 35px;
+  width: 50px;
+  border-radius: 3px;
+  background-color: $hippie-orange;
+  color: white;
+
+  &:hover {
+    background-color: $deep-orange;
+  }
+}

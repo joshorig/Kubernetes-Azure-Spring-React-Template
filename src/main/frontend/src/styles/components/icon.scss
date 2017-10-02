@@ -1,0 +1,9 @@
+@import '../variables';
+
+.icon {
+  margin: 5px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

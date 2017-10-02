@@ -1,0 +1,49 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+
+logging:
+  level:
+    org.springframework.web: ERROR
+    org.hibernate: ERROR
+    com.greatapp: DEBUG
+    com.greatapp.configs: ERROR
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %c: %M - %m%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5p %c: %M - %m%n"
+  file: /logs/application.log
+
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      # Hibernate ddl auto (validate, update, create, create-drop)
+      ddl-auto: update
+
+---
+spring:
+  profiles: development
+  datasource:
+    url: ${jdbcurl}
+    username: ${jdbcuser}
+    password: ${jdbcpass}
+  jpa:
+    properties:
+      hibernate:
+        dialect: ${jdbcdialect}
+logging:
+  file: ${logspath}
+
+---
+spring:
+  profiles: production
+  datasource:
+    url: ${jdbcurl}
+    username: ${jdbcuser}
+    password: ${jdbcpass}
+  jpa:
+    properties:
+      hibernate:
+        dialect: ${jdbcdialect}
+logging:
+  file: ${logspath}

@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  mysql:
+    build: 
+      context: .
+      dockerfile: Dockerfile.mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    networks:
+      - greatapp_net
+    
+  web:
+    build: .
+    ports:
+     - "80:8080"
+    depends_on:
+      - mysql
+    networks:
+      - greatapp_net
+    volumes:
+      - ~/app/logs/:/app/logs/
+    command: [ "./wait-for-it.sh", "mysql:3306", "-t", "15", "--",
+              "java", "-Dspring.profiles.active=development",
+              "-jar", "spring-boot-and-react-app-0.1.0.jar"]
+            
+networks:
+  greatapp_net:
+    driver: bridge

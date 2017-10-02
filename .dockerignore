@@ -1,0 +1,8 @@
+src/main/frontend/build
+src/main/frontend/etc
+src/main/frontend/node
+src/main/frontend/node_modules
+src/main/frontend/package-lock.json
+src/main/resources/static/index.html
+src/main/resources/static/asset-manifest.json
+src/main/resources/static/static
